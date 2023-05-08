@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 interface IDiamondERC20 {
+  function initERC20(string memory name, string memory symbol, uint256 maxSupply) external;
   function nameERC20() external view returns (string memory);
   function symbolERC20() external view returns (string memory);
   function approveERC20(address spender, uint256 amount) external;

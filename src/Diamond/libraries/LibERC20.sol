@@ -6,6 +6,7 @@ error amountZero();
 error insufficientFunds();
 error insufficientAllowance();
 error maxSupplyReach();
+error alreadyInitialized();
 
 library LibERC20 {
   bytes32 constant ERC20_STORAGE_POSITION = keccak256("facet.erc20.diamond.storage");
@@ -15,6 +16,7 @@ library LibERC20 {
     string _symbol;
     uint256 _maxSupply;
     uint256 _totalSupply;
+    bool _init;
     mapping(address => uint256) _balances;
     mapping(address => mapping(address => uint256)) _allowances;
   }
@@ -24,9 +26,11 @@ library LibERC20 {
 
   function init(string memory _name, string memory _symbol, uint256 _maxSupply) internal {
     Storage storage ds = getStorage();
+    if (ds._init) revert alreadyInitialized();
     ds._name = _name;
     ds._symbol = _symbol;
     ds._maxSupply = _maxSupply;
+    ds._init = true;
   }
 
   // access erc20 storage via:

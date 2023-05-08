@@ -4,9 +4,13 @@ pragma solidity ^0.8.18;
 import { LibERC20 } from "../libraries/LibERC20.sol";
 import { LibDiamond } from "../libraries/LibDiamond.sol";
 
+import { IDiamondERC20 } from "../interfaces/IDiamondERC20.sol";
+
 contract ERC20Facet {
-  constructor(string memory _name, string memory _symbol, uint256 _maxSupply) {
-    LibERC20.init(_name, _symbol, _maxSupply);
+  function initERC20(string memory name, string memory symbol, uint256 maxSupply) external {
+    LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+    ds.supportedInterfaces[type(IDiamondERC20).interfaceId] = true;
+    LibERC20.init(name, symbol, maxSupply);
   }
 
   function nameERC20() external view returns (string memory) {
